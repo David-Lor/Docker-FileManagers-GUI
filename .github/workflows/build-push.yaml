@@ -1,0 +1,78 @@
+name: "Build & Push"
+on:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+    inputs:
+      tag_version:
+        description: "Tag-Version to upload the image"
+        required: true
+
+jobs:
+  build-push:
+    name: "[${{ matrix.app }}] Build & Push"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - nautilus
+          - thunar
+
+    steps:
+      # Setup
+      - name: "Checkout"
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+
+      # Set Docker image tag
+      - name: "Docker image tag version (on main branch push) to file"
+        if: github.ref == 'refs/heads/main'
+        run: echo latest > /tmp/docker_tag_version.txt
+      - name: "Docker image tag version (on develop branch push) to file"
+        if: github.ref == 'refs/heads/develop'
+        run: echo dev > /tmp/docker_tag_version.txt
+      - name: "Docker image tag version (on workflow dispatch) to file"
+        if: github.event.inputs.tag_version
+        run: echo ${{ github.event.inputs.tag_version }} > /tmp/docker_tag_version.txt
+      - name: "Read extracted image tag version from file"
+        id: get_docker_tag_version_from_file
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: /tmp/docker_tag_version.txt
+      - name: "Set image tag version to variable"
+        id: get_image_tag_version
+        run: echo ::set-output name=VERSION::$(echo ${{ steps.get_docker_tag_version_from_file.outputs.content }})
+      - name: "Validate image tag version"
+        run: test ${{ steps.get_image_tag_version.outputs.VERSION }} || exit 1
+      - name: "Set complete image tag"
+        id: get_image_tag
+        run: echo ::set-output name=TAG::$(echo ghcr.io/david-lor/${{ matrix.app }}-gui:${{ steps.get_image_tag_version.outputs.VERSION }})
+      - name: "Validate final image tag"
+        run: |-
+          test ${{ steps.get_image_tag.outputs.TAG }} || exit 1
+          [[ ${{ steps.get_image_tag.outputs.TAG }} =~ ^.+:.+$ ]] || exit 1
+
+      # Docker login
+      - name: "Login to GitHub Container Registry"
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build & Push
+      - name: "Docker cache"
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+        with:
+          key: docker-cache-${{ matrix.app }}-{hash}
+          restore-keys: |
+            docker-cache-${{ matrix.app }}-
+      - name: "Docker build"
+        run: docker build ./${{ matrix.app }} -t ${{ steps.get_image_tag.outputs.TAG }}
+      - name: "Docker push"
+        run: docker push ${{ steps.get_image_tag.outputs.TAG }}
