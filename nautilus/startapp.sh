@@ -1,9 +1,9 @@
 #!/bin/sh
 
-NAUTILUS_ROOT=${NAUTILUS_ROOT:="/"}
+ROOT_PATH=${ROOT_PATH:="/"}
 
 set -ex
 
 export HOME=/config
 mkdir -p /config/xdg/config/nautilus
-exec nautilus "$NAUTILUS_ROOT"
+exec nautilus "$ROOT_PATH"

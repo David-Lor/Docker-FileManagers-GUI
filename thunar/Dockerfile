@@ -3,7 +3,7 @@ ARG APP_ICON="https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Thunar.s
 
 FROM jlesage/baseimage-gui:${IMAGE_TAG}
 ENV APP_NAME="Thunar" \
-    NAUTILUS_ROOT="/mnt"
+    ROOT_PATH="/mnt"
 
 # Nautilus installation
 RUN add-pkg thunar

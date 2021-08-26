@@ -3,7 +3,7 @@ ARG APP_ICON="https://upload.wikimedia.org/wikipedia/commons/3/36/GNOME_Files_lo
 
 FROM jlesage/baseimage-gui:${IMAGE_TAG}
 ENV APP_NAME="Nautilus" \
-    NAUTILUS_ROOT="/mnt"
+    ROOT_PATH="/mnt"
 
 # Nautilus installation
 RUN add-pkg nautilus

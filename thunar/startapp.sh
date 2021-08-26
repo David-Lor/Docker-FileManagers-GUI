@@ -1,8 +1,8 @@
 #!/bin/sh
 
-THUNAR_ROOT=${THUNAR_ROOT:="/"}
+ROOT_PATH=${ROOT_PATH:="/"}
 
 set -ex
 
 export HOME=/config
-exec thunar "$THUNAR_ROOT"
+exec thunar "$ROOT_PATH"
