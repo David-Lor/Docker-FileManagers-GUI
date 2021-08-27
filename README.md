@@ -33,3 +33,10 @@ BUILD_TAG="debian-10"
 docker build --build-arg IMAGE_TAG=$BUILD_TAG -t local/$FILEBROWSER ./$FILEBROWSER
 docker run -d --name=$FILEBROWSER -p 5800:5800 -v /etc/localtime:/etc/localtime:ro local/$FILEBROWSER
 ```
+
+## Changelog
+
+- 0.0.1
+  - Initial Nautilus image
+  - Initial Thunar image
+  - Initial Dolphin image
