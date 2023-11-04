@@ -1,0 +1,51 @@
+name: "Copy image tag"
+on:
+  workflow_dispatch:
+    inputs:
+      from:
+        description: "Image tag version from"
+        required: true
+      to:
+        description: "Image tag version to"
+        required: true
+
+jobs:
+  build-push:
+    name: "[${{ matrix.app }}] Copy image tag"
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG_BASE: "ghcr.io/david-lor/${{ matrix.app }}-gui"
+    permissions:
+      packages: write
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - nautilus
+          - thunar
+          - dolphin
+
+    steps:
+      # Registry login
+      - name: "Login to GitHub Container Registry"
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Export images full tags as env vars"
+        run: |
+          echo "IMAGE_TAG_FROM=${{ env.IMAGE_TAG_BASE }}:${{ github.event.inputs.from }}" >> $GITHUB_ENV
+          echo "IMAGE_TAG_TO=${{ env.IMAGE_TAG_BASE }}:${{ github.event.inputs.to }}" >> $GITHUB_ENV
+
+      # Pull "from" image
+      - name: "Docker Pull"
+        run: docker pull "${{ env.IMAGE_TAG_FROM }}"
+
+      # Push "to" image
+      - name: "Docker Push"
+        run: |
+          docker tag "${{ env.IMAGE_TAG_FROM }}" "${{ env.IMAGE_TAG_TO }}"
+          docker push "${{ env.IMAGE_TAG_TO }}"
