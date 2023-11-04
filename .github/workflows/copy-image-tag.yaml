@@ -1,4 +1,4 @@
-name: "Build & Push"
+name: "Copy image tag"
 on:
   workflow_dispatch:
     inputs:
