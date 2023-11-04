@@ -23,6 +23,7 @@ jobs:
           - nautilus
           - thunar
           - dolphin
+          - krusader
 
     steps:
       # Setup
