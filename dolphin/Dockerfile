@@ -1,4 +1,4 @@
-ARG IMAGE_TAG="debian-10"
+ARG IMAGE_TAG="debian-11"
 ARG APP_ICON="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Dolphin-icon.svg/600px-Dolphin-icon.svg.png"
 
 FROM jlesage/baseimage-gui:${IMAGE_TAG}
