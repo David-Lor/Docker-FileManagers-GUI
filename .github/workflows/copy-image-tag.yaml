@@ -25,6 +25,7 @@ jobs:
           - nautilus
           - thunar
           - dolphin
+          - krusader
 
     steps:
       # Registry login
