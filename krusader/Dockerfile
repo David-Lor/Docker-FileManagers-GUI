@@ -6,7 +6,7 @@ ENV APP_NAME="Krusader" \
     ROOT_PATH="/mnt"
 
 # TODO Install icons & other recommended apps from startup
-RUN add-pkg krusader
+RUN add-pkg krusader breeze-icon-theme
 
 # Set application icon
 ARG APP_ICON
