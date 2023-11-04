@@ -2,6 +2,14 @@ name: "Build & Push"
 on:
   workflow_dispatch:
     inputs:
+      apps:
+        description: "App/s to build+push"
+        type: choice
+        options:
+          - nautilus
+          - dolphin
+          - thunar
+          - krusader
       image_tag_version:
         description: "Image tag versions (comma-separated)"
         required: true
@@ -19,11 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        app:
-          - nautilus
-          - thunar
-          - dolphin
-          - krusader
+        app: ${{ fromJSON(github.event.inputs.apps)}}
 
     steps:
       # Setup

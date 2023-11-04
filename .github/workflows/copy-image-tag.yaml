@@ -2,6 +2,14 @@ name: "Copy image tag"
 on:
   workflow_dispatch:
     inputs:
+      apps:
+        description: "App/s to copy tags from+to"
+        type: choice
+        options:
+          - nautilus
+          - dolphin
+          - thunar
+          - krusader
       from:
         description: "Image tag version from"
         required: true
@@ -21,11 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        app:
-          - nautilus
-          - thunar
-          - dolphin
-          - krusader
+        app: ${{ fromJSON(github.event.inputs.apps)}}
 
     steps:
       # Registry login
