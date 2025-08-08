@@ -5,8 +5,7 @@ FROM jlesage/baseimage-gui:${IMAGE_TAG}
 ENV APP_NAME="Krusader" \
     ROOT_PATH="/mnt"
 
-# TODO Install icons & other recommended apps from startup
-RUN add-pkg krusader breeze-icon-theme
+RUN add-pkg krusader breeze-icon-theme kdiff3 krename zip unzip bzip2
 
 # Set application icon
 ARG APP_ICON
