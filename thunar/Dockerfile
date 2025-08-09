@@ -14,6 +14,7 @@ RUN install_app_icon.sh ${APP_ICON}
 
 # Entrypoint script
 COPY startapp.sh /startapp.sh
+RUN chmod +x /startapp.sh
 
 # Volumes definition
 VOLUME ["/config"]
