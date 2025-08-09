@@ -6,7 +6,7 @@ ENV APP_NAME="Thunar" \
     ROOT_PATH="/mnt"
 
 # Thunar installation
-RUN add-pkg thunar
+RUN add-pkg thunar breeze-icon-theme
 
 # Set application icon
 ARG APP_ICON

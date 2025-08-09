@@ -6,7 +6,7 @@ ENV APP_NAME="Dolphin" \
     ROOT_PATH="/mnt"
 
 # Dolphin installation
-RUN add-pkg dolphin
+RUN add-pkg dolphin breeze-icon-theme
 
 # Set application icon
 ARG APP_ICON

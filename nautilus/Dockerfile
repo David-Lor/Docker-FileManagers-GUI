@@ -6,7 +6,7 @@ ENV APP_NAME="Nautilus" \
     ROOT_PATH="/mnt"
 
 # Nautilus installation
-RUN add-pkg nautilus
+RUN add-pkg nautilus breeze-icon-theme
 
 # Set application icon
 ARG APP_ICON
