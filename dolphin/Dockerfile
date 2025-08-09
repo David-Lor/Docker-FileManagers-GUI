@@ -5,7 +5,7 @@ FROM jlesage/baseimage-gui:${IMAGE_TAG}
 ENV APP_NAME="Dolphin" \
     ROOT_PATH="/mnt"
 
-# Nautilus installation
+# Dolphin installation
 RUN add-pkg dolphin
 
 # Set application icon

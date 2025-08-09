@@ -2,14 +2,50 @@ name: "Build & Push"
 on:
   workflow_dispatch:
     inputs:
+      build_nautilus:
+        description: "Build Nautilus"
+        type: boolean
+      build_dolphin:
+        description: "Build Dolphin"
+        type: boolean
+      build_thunar:
+        description: "Build Thunar"
+        type: boolean
+      build_krusader:
+        description: "Build Krusader"
+        type: boolean
       image_tag_version:
         description: "Image tag versions (comma-separated)"
         required: true
 
 jobs:
+  format-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      build-apps: ${{ env.BUILD_APPS }}
+    steps:
+      - name: Format build-apps matrix
+        shell: python
+        run: |
+          import os, json
+          apps = []
+          if "${{ github.event.inputs.build_nautilus }}" == "true":
+            apps.append("nautilus")
+          if "${{ github.event.inputs.build_dolphin }}" == "true":
+            apps.append("dolphin")
+          if "${{ github.event.inputs.build_thunar }}" == "true":
+            apps.append("thunar")
+          if "${{ github.event.inputs.build_krusader }}" == "true":
+            apps.append("krusader")
+          print("Build apps:", apps)
+          with open(os.getenv('GITHUB_ENV'), "a") as ghenv:
+              ghenv.write(f"BUILD_APPS={json.dumps(apps)}")
+
   build-push:
     name: "[${{ matrix.app }}] Build & Push"
     runs-on: ubuntu-latest
+    needs:
+      - format-matrix
     env:
       IMAGE_TAG_BASE: "ghcr.io/david-lor/${{ matrix.app }}-gui"
       IMAGE_TAG_INTERNAL: "${{ matrix.app }}-gui"
@@ -19,10 +55,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        app:
-          - nautilus
-          - thunar
-          - dolphin
+        app: ${{ fromJSON(needs.format-matrix.outputs.build-apps)}}
 
     steps:
       # Setup

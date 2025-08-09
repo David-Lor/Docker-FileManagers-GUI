@@ -5,7 +5,7 @@ FROM jlesage/baseimage-gui:${IMAGE_TAG}
 ENV APP_NAME="Thunar" \
     ROOT_PATH="/mnt"
 
-# Nautilus installation
+# Thunar installation
 RUN add-pkg thunar
 
 # Set application icon
