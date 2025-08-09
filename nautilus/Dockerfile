@@ -1,4 +1,4 @@
-ARG IMAGE_TAG="debian-11"
+ARG IMAGE_TAG="debian-12-v4"
 ARG APP_ICON="https://upload.wikimedia.org/wikipedia/commons/3/36/GNOME_Files_logo.png"
 
 FROM jlesage/baseimage-gui:${IMAGE_TAG}
